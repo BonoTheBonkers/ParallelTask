@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "PermutationsFinder.h"
-#include <iostream>
-#include <algorithm>
 
 using namespace std;
 
@@ -38,6 +36,8 @@ void findPermutations(int a[], int n)
 
 int PermutationsFinder::FindPermutations()
 {
+	lastStartTime = high_resolution_clock::now();
+
 	int digits[] = {0,1,2,3,4,5,6,7,8,9};
 
 	int n = sizeof(digits) / sizeof(digits[0]);
