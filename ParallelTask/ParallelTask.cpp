@@ -3,16 +3,10 @@
 
 #include "PermutationsFinder.h"
 
-
-PermutationsFinder* finder;
-
 int main()
 {
-	finder = new PermutationsFinder();
-	const int PermutationsFound = finder->FindPermutations();
-    std::cout << "Hello Piotrek!\n";
+	const int matchingResultsFound = PermutationsFinder::DoJob();
+    std::cout << "Matching results found: " << matchingResultsFound << "!\n";
 	
 	std::cin.get();
-	delete finder;
-	finder = NULL;
 }

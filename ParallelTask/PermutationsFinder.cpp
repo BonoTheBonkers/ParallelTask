@@ -3,15 +3,21 @@
 
 using namespace std;
 
-PermutationsFinder::PermutationsFinder()
+int PermutationsFinder::DoJob()
 {
+	high_resolution_clock::time_point startTime = high_resolution_clock::now();
+
+	int digits[] = { 0,1,2,3,4,5,6,7,8,9 };
+
+	int n = sizeof(digits) / sizeof(digits[0]);
+
+	FindDigitsPermutations(digits, n);
+
+	duration<double> jobDuration = high_resolution_clock::now() - startTime;
+	std::cout << "Latest job duration: " << jobDuration.count() << " seconds.";
+	return 0;
 }
 
-PermutationsFinder::~PermutationsFinder()
-{
-}
-
-// Function to display the array 
 void PermutationsFinder::Display(int a[], int n)
 {
 	for (int i = 0; i < n; i++) {
@@ -20,47 +26,28 @@ void PermutationsFinder::Display(int a[], int n)
 	cout << endl;
 }
 
-void PermutationsFinder::CheckPermutationCombinations(int a[], int n)
-{
-
-}
-
-// Function to find the permutations 
 void PermutationsFinder::FindDigitsPermutations(int a[], int n)
 {
-	// Sort the given array 
 	sort(a, a + n);
 
-	// Find all possible permutations 
 	cout << "Possible permutations are:\n";
 	do {
 		CheckPermutationCombinations(a, n);
 	} while (next_permutation(a, a + n));
 }
 
-int PermutationsFinder::FindPermutations()
+void PermutationsFinder::CheckPermutationCombinations(int a[], int n)
 {
-	OnCalculationsStarted();
+	//Display(a, n);
+	for (int i = 1; i < n - 1; ++i)
+	{
+		for (int j = 1; j < n - 1; ++j)
+		{
+			if (i != j)
+			{
+				//@TODO do the calculations here, i stands for /, j for +
+			}
 
-	int digits[] = {0,1,2,3,4,5,6,7,8,9};
-
-	int n = sizeof(digits) / sizeof(digits[0]);
-
-	FindDigitsPermutations(digits, n);
-
-	OnCalculationsEnded();
-
-	return 0;
-}
-
-void PermutationsFinder::OnCalculationsStarted()
-{
-	lastStartTime = high_resolution_clock::now();
-}
-
-void PermutationsFinder::OnCalculationsEnded()
-{
-	lastEndTime = high_resolution_clock::now();
-	lastDuration = lastEndTime - lastStartTime;
-	std::cout << "Latest job duration: " << lastDuration.count() << " seconds.";
+		}
+	}
 }

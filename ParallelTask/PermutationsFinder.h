@@ -12,25 +12,13 @@ using namespace std::chrono;
 class PermutationsFinder
 {
 public:
-	high_resolution_clock::time_point lastStartTime;
-	high_resolution_clock::time_point lastEndTime;
-	duration<double> lastDuration;
+	PermutationsFinder() {}
+	~PermutationsFinder() {}
+
+	static int DoJob();
 
 private:
-	//@TODO add public variables here
-
-
-public:
-	PermutationsFinder();
-	~PermutationsFinder();
-
-	int FindPermutations();
-
-private:
-	void Display(int a[], int n);
-	void CheckPermutationCombinations(int a[], int n);
-	void FindDigitsPermutations(int a[], int n);
-
-	void OnCalculationsStarted();
-	void OnCalculationsEnded();
+	static void Display(int a[], int n);
+	static void FindDigitsPermutations(int a[], int n);
+	static void CheckPermutationCombinations(int a[], int n);
 };
