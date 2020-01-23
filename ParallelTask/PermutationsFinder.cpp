@@ -30,6 +30,7 @@ void PermutationsFinder::FindDigitsPermutations(int a[], int n)
 {
 	sort(a, a + n);
 
+	//@TODO maybe divide into parallel jobs here?
 	cout << "Possible permutations are:\n";
 	do {
 		CheckPermutationCombinations(a, n);
@@ -47,7 +48,6 @@ void PermutationsFinder::CheckPermutationCombinations(int a[], int n)
 			{
 				//@TODO do the calculations here, i stands for /, j for +
 			}
-
 		}
 	}
 }
