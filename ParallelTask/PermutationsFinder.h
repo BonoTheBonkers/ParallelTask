@@ -15,10 +15,9 @@ public:
 	PermutationsFinder() {}
 	~PermutationsFinder() {}
 
-	static int DoJob();
+	static void DoJob();
 
 private:
-	static void Display(int a[], int n);
-	static void FindDigitsPermutations(int a[], int n);
-	static void CheckPermutationCombinations(int a[], int n);
+	static int FindDigitsPermutations(int a[], int n);
+	static int CheckPermutationCombinations(int a[], int n);
 };

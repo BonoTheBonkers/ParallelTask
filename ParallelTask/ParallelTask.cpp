@@ -5,8 +5,7 @@
 
 int main()
 {
-	const int matchingResultsFound = PermutationsFinder::DoJob();
-    std::cout << "Matching results found: " << matchingResultsFound << "!\n";
+	PermutationsFinder::DoJob();
 	
 	std::cin.get();
 }
