@@ -18,7 +18,7 @@ void PermutationsFinder::DoJob()
 	std::cout << "Job duration: " << jobDuration.count() << " seconds.";
 }
 
-int PermutationsFinder::FindDigitsPermutations(int a[], int n)
+int PermutationsFinder::FindDigitsPermutations(int *a, int n)
 {
 	int result = 0;
 
@@ -33,7 +33,7 @@ int PermutationsFinder::FindDigitsPermutations(int a[], int n)
 	return result;
 }
 
-int PermutationsFinder::CheckPermutationCombinations(int a[], int n)
+int PermutationsFinder::CheckPermutationCombinations(int *a, int n)
 {
 	int result = 0;
 
@@ -48,6 +48,7 @@ int PermutationsFinder::CheckPermutationCombinations(int a[], int n)
 				int currentNumber1 = 0;
 				int currentNumber2 = 0;
 				int currentNumber3 = 0;
+
 				for (int x = 0; x < n; ++x)
 				{
 					if (x == i || x == j)
@@ -77,7 +78,7 @@ int PermutationsFinder::CheckPermutationCombinations(int a[], int n)
 					{
 						if ((currentNumber1 / currentNumber2 + currentNumber3) == 100)
 						{
-							++result;
+							//++result;
 							//cout << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << "\n";
 						}
 					}
@@ -88,20 +89,14 @@ int PermutationsFinder::CheckPermutationCombinations(int a[], int n)
 					{
 						if ((currentNumber1 + currentNumber2 / currentNumber3) == 100)
 						{
-							++result;
+							//++result;
 							//cout << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << "\n";
 						}
 					}
 				}
-
-				//currentNumber += a[0] * 1000000000;
-				//currentNumber += a[1] *  100000000;
-				//currentNumber += a[2] *   10000000;
-
-
-				//@TODO do the calculations here, i stands for /, j for +
 			}
 		}
 	}
+
 	return result;
 }

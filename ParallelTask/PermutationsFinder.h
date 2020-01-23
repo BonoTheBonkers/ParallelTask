@@ -18,6 +18,6 @@ public:
 	static void DoJob();
 
 private:
-	static int FindDigitsPermutations(int a[], int n);
-	static int CheckPermutationCombinations(int a[], int n);
+	static int FindDigitsPermutations(int *a, int n);
+	static int CheckPermutationCombinations(int *a, int n);
 };
