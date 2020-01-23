@@ -14,6 +14,7 @@ class PermutationsFinder
 public:
 	high_resolution_clock::time_point lastStartTime;
 	high_resolution_clock::time_point lastEndTime;
+	duration<double> lastDuration;
 
 private:
 	//@TODO add public variables here
@@ -24,4 +25,12 @@ public:
 	~PermutationsFinder();
 
 	int FindPermutations();
+
+private:
+	void Display(int a[], int n);
+	void CheckPermutationCombinations(int a[], int n);
+	void FindDigitsPermutations(int a[], int n);
+
+	void OnCalculationsStarted();
+	void OnCalculationsEnded();
 };
