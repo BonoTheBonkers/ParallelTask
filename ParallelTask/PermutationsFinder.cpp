@@ -45,9 +45,9 @@ int PermutationsFinder::CheckPermutationCombinations(int *a, int n)
 			{
 				int currentNumberIndex = 1;
 
-				int currentNumber1 = 0;
-				int currentNumber2 = 0;
-				int currentNumber3 = 0;
+				float currentNumber1 = 0.0f;
+				float currentNumber2 = 0.0f;
+				float currentNumber3 = 0.0f;
 
 				for (int x = 0; x < n; ++x)
 				{
@@ -57,40 +57,40 @@ int PermutationsFinder::CheckPermutationCombinations(int *a, int n)
 					}
 					if (currentNumberIndex == 1)
 					{
-						currentNumber1 *= 10;
-						currentNumber1 += a[x];
+						currentNumber1 *= 10.f;
+						currentNumber1 += (float)a[x];
 					}
 					else if (currentNumberIndex == 2)
 					{
-						currentNumber2 *= 10;
-						currentNumber2 += a[x];
+						currentNumber2 *= 10.f;
+						currentNumber2 += (float)a[x];
 					}
 					else if (currentNumberIndex == 3)
 					{
-						currentNumber3 *= 10;
-						currentNumber3 += a[x];
+						currentNumber3 *= 10.f;
+						currentNumber3 += (float)a[x];
 					}
 				}
 
 				if (i > j)
 				{
-					if (currentNumber2 != 0)
+					if (currentNumber2 != 0.0f)
 					{
-						if ((currentNumber1 / currentNumber2 + currentNumber3) == 100)
+						if ((currentNumber1 / currentNumber2 + currentNumber3) == 100.0f)
 						{
-							//++result;
-							//cout << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << "\n";
+							++result;
+							cout << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << "\n";
 						}
 					}
 				}
 				else
 				{
-					if (currentNumber3 != 0)
+					if (currentNumber3 != 0.0f)
 					{
-						if ((currentNumber1 + currentNumber2 / currentNumber3) == 100)
+						if ((currentNumber1 + currentNumber2 / currentNumber3) == 100.0f)
 						{
-							//++result;
-							//cout << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << "\n";
+							++result;
+							cout << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << "\n";
 						}
 					}
 				}
