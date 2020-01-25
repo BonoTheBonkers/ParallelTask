@@ -7,11 +7,11 @@
 int main()
 {
 	int inShouldPrint = 0;
-	cout << "Do you want to print matching results? (type '1' to print)" << endl;
+	cout << "Do you want to print matching results? ('1' to print, '0' to not print)" << endl;
 	cin >> inShouldPrint;
 
 	int inShouldPerformMultithread = 0;
-	cout << endl << "Do you want to run job multithreaded? (type '1' to run multithreaded)" << endl;
+	cout << endl << "Do you want to run job in multithread mode? ('1' to mutli, '0' single thread)" << endl;
 	cin >> inShouldPerformMultithread;
 
 	PermutationsFinder::DoJob(inShouldPrint == 1, inShouldPerformMultithread == 1);
