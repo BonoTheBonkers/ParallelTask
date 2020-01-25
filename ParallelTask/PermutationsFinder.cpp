@@ -6,19 +6,26 @@
 
 using namespace std;
 
-void PermutationsFinder::DoJob(bool shouldPrintMatchingResults /* = false */)
+void PermutationsFinder::DoJob(bool shouldPrintMatchingResults /* = false */, bool runParallel /* = true */)
 {
 	// sleep for 2 seconds
-	std::cout << "Job will start in 5 seconds" << "." << endl << endl;
+	std::cout << "Job will start in 4 seconds" << "." << endl << endl;
 	using namespace std::this_thread;
 	sleep_until(system_clock::now() + seconds(2));
 
-#pragma omp parallel
+	if (runParallel)
 	{
-#pragma omp critical
+#pragma omp parallel
 		{
-			cout << "Thread number : " << omp_get_thread_num() << " is ready to work!\n";
+#pragma omp critical
+			{
+				cout << "Thread number : " << omp_get_thread_num() << " is ready to work!\n";
+			}
 		}
+	}
+	else
+	{
+		cout << "Running job on single thread!!\n";
 	}
 	cout << endl << endl;
 
@@ -31,7 +38,7 @@ void PermutationsFinder::DoJob(bool shouldPrintMatchingResults /* = false */)
 	int n = sizeof(digits) / sizeof(digits[0]);
 
 	int allMatchingResult = 0;
-	FindMatchingDigitsAndOperatorsPermutations(digits, n, allMatchingResult, shouldPrintMatchingResults);
+	FindMatchingDigitsAndOperatorsPermutations(digits, n, allMatchingResult, shouldPrintMatchingResults, runParallel);
 	std::cout << endl << endl << "Matching results: " << allMatchingResult << endl << endl;
 
 	duration<double> runDuration = high_resolution_clock::now() - runStartTime;
@@ -42,7 +49,7 @@ void PermutationsFinder::DoJob(bool shouldPrintMatchingResults /* = false */)
 	sleep_until(system_clock::now() + seconds(10));
 }
 
-void PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int* digitsArray, int n, int& outMatchingResults, bool shouldPrintMatchingResults)
+void PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int* digitsArray, int n, int& outMatchingResults, bool shouldPrintMatchingResults, bool runParallel)
 {
 	int result = 0;
 
@@ -57,11 +64,21 @@ void PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int* digitsA
 
 	cout << endl << "PermuationsAmount: " << PermuationsAmount << endl;
 
-	#pragma omp parallel
-	#pragma omp for
-	for (int i = 0; i < PermuationsAmount; ++i)
+	if (runParallel)
 	{
-		CheckIthPermutation(10, i, outMatchingResults, shouldPrintMatchingResults);
+#pragma omp parallel
+#pragma omp for
+		for (int i = 0; i < PermuationsAmount; ++i)
+		{
+			CheckIthPermutation(10, i, outMatchingResults, shouldPrintMatchingResults);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < PermuationsAmount; ++i)
+		{
+			CheckIthPermutation(10, i, outMatchingResults, shouldPrintMatchingResults);
+		}
 	}
 }
 
