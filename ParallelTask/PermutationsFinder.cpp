@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "PermutationsFinder.h"
+#include <omp.h>
+#include <vector>
 
 using namespace std;
 
@@ -7,36 +9,83 @@ void PermutationsFinder::DoJob()
 {
 	high_resolution_clock::time_point startTime = high_resolution_clock::now();
 
+	#pragma omp parallel
+	{
+		cout << "Thread number : " << omp_get_thread_num() << " is ready to work!\n";
+	}
+	cout << "\n";
+
 	int digits[] = { 0,1,2,3,4,5,6,7,8,9 };
 
 	int n = sizeof(digits) / sizeof(digits[0]);
 
-	int result = FindDigitsPermutations(digits, n);
+	int result = FindMatchingDigitsAndOperatorsPermutations(digits, n);
 	std::cout << "Matching results: " << result << ". \n";
 
 	duration<double> jobDuration = high_resolution_clock::now() - startTime;
 	std::cout << "Job duration: " << jobDuration.count() << " seconds.";
 }
 
-int PermutationsFinder::FindDigitsPermutations(int *a, int n)
+int PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int *a, int n)
 {
 	int result = 0;
 
 	sort(a, a + n);
 
-	//@TODO maybe divide into parallel jobs here?
 	cout << "Possible permutations are:\n";
-	do {
-		result += CheckPermutationCombinations(a, n);
-	} while (next_permutation(a, a + n));
+
+	int PermuationsAmount = 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
+
+	cout << "PermuationsAmount: " << PermuationsAmount << "\n";
+
+	int newValue = 0;
+
+	#pragma omp parallel
+	#pragma omp for
+	for (int i = 0; i < PermuationsAmount; ++i)
+	{
+		newValue = CheckIthPermutation(10, i);
+		if (newValue > 0)
+		{
+			result += newValue;
+		}
+	}
 
 	return result;
 }
 
-int PermutationsFinder::CheckPermutationCombinations(int *a, int n)
+// Finding ith permutation function is based on this source: 
+// https://stackoverflow.com/questions/7918806/finding-n-th-permutation-without-computing-others
+int PermutationsFinder::CheckIthPermutation(int n, int i)
+{
+	int j, k = 0;
+	int *fact = (int *)calloc(n, sizeof(int));
+	int *perm = (int *)calloc(n, sizeof(int));
+
+	fact[k] = 1;
+	while (++k < n)
+		fact[k] = fact[k - 1] * k;
+
+	for (k = 0; k < n; ++k)
+	{
+		perm[k] = i / fact[n - 1 - k];
+		i = i % fact[n - 1 - k];
+	}
+
+	for (k = n - 1; k > 0; --k)
+		for (j = k - 1; j >= 0; --j)
+			if (perm[j] <= perm[k])
+				perm[k]++;
+
+	free(fact);
+	free(perm);
+
+	return CheckPermutationOperatorsCombinations(perm, n);
+}
+
+int PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n)
 {
 	int result = 0;
-
 	for (int i = 1; i < n; ++i)
 	{
 		for (int j = 1; j < n; ++j)
@@ -79,7 +128,7 @@ int PermutationsFinder::CheckPermutationCombinations(int *a, int n)
 						if ((currentNumber1 / currentNumber2 + currentNumber3) == 100.0f)
 						{
 							++result;
-							cout << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << "\n";
+							//cout << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << "\n";
 						}
 					}
 				}
@@ -90,7 +139,7 @@ int PermutationsFinder::CheckPermutationCombinations(int *a, int n)
 						if ((currentNumber1 + currentNumber2 / currentNumber3) == 100.0f)
 						{
 							++result;
-							cout << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << "\n";
+							//cout << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << "\n";
 						}
 					}
 				}
