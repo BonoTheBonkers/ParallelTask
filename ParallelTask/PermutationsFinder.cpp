@@ -5,9 +5,9 @@
 
 using namespace std;
 
-void PermutationsFinder::DoJob()
+void PermutationsFinder::DoJob(bool shouldPrintMatchingResults /* = false */)
 {
-	high_resolution_clock::time_point startTime = high_resolution_clock::now();
+	high_resolution_clock::time_point runStartTime = high_resolution_clock::now();
 
 	#pragma omp parallel
 	{
@@ -19,18 +19,19 @@ void PermutationsFinder::DoJob()
 
 	int n = sizeof(digits) / sizeof(digits[0]);
 
-	int result = FindMatchingDigitsAndOperatorsPermutations(digits, n);
-	std::cout << "Matching results: " << result << ". \n";
+	int allMatchingResult = 0;
+	FindMatchingDigitsAndOperatorsPermutations(digits, n, allMatchingResult);
+	std::cout << "Matching results: " << allMatchingResult << ". \n";
 
-	duration<double> jobDuration = high_resolution_clock::now() - startTime;
-	std::cout << "Job duration: " << jobDuration.count() << " seconds.";
+	duration<double> runDuration = high_resolution_clock::now() - runStartTime;
+	std::cout << "Job duration: " << runDuration.count() << " seconds.";
 }
 
-int PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int *a, int n)
+void PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int *digitsArray, int arrayLength, int& outMatchingResults)
 {
 	int result = 0;
 
-	sort(a, a + n);
+	sort(digitsArray, digitsArray + arrayLength);
 
 	cout << "Possible permutations are:\n";
 
@@ -38,25 +39,18 @@ int PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int *a, int n
 
 	cout << "PermuationsAmount: " << PermuationsAmount << "\n";
 
-	int newValue = 0;
-
+	int latestResult = 0;
 	#pragma omp parallel
 	#pragma omp for
 	for (int i = 0; i < PermuationsAmount; ++i)
 	{
-		newValue = CheckIthPermutation(10, i);
-		if (newValue > 0)
-		{
-			result += newValue;
-		}
+		CheckIthPermutation(10, i, outMatchingResults);
 	}
-
-	return result;
 }
 
 // Finding ith permutation function is based on this source: 
 // https://stackoverflow.com/questions/7918806/finding-n-th-permutation-without-computing-others
-int PermutationsFinder::CheckIthPermutation(int n, int i)
+void PermutationsFinder::CheckIthPermutation(int n, int i, int& outMatchingResults)
 {
 	int j, k = 0;
 	int *fact = (int *)calloc(n, sizeof(int));
@@ -80,10 +74,10 @@ int PermutationsFinder::CheckIthPermutation(int n, int i)
 	free(fact);
 	free(perm);
 
-	return CheckPermutationOperatorsCombinations(perm, n);
+	CheckPermutationOperatorsCombinations(perm, n, outMatchingResults);
 }
 
-int PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n)
+void PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n, int& outMatchingResults)
 {
 	int result = 0;
 	for (int i = 1; i < n; ++i)
@@ -127,7 +121,7 @@ int PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n)
 					{
 						if ((currentNumber1 / currentNumber2 + currentNumber3) == 100.0f)
 						{
-							++result;
+							++outMatchingResults;
 							//cout << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << "\n";
 						}
 					}
@@ -138,7 +132,7 @@ int PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n)
 					{
 						if ((currentNumber1 + currentNumber2 / currentNumber3) == 100.0f)
 						{
-							++result;
+							++outMatchingResults;
 							//cout << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << "\n";
 						}
 					}
@@ -146,6 +140,4 @@ int PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n)
 			}
 		}
 	}
-
-	return result;
 }

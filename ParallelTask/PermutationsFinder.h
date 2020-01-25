@@ -15,10 +15,10 @@ public:
 	PermutationsFinder() {}
 	~PermutationsFinder() {}
 
-	static void DoJob();
+	static void DoJob(bool shouldPrintMatchingResults = false);
 
 private:
-	static int FindMatchingDigitsAndOperatorsPermutations(int *a, int n);
-	static int CheckIthPermutation(int n, int i);
-	static int CheckPermutationOperatorsCombinations(int *a, int n);
+	static void FindMatchingDigitsAndOperatorsPermutations(int *digitsArray, int arrayLength, int& outMatchingResults);
+	static void CheckIthPermutation(int n, int i, int& outMatchingResults);
+	static void CheckPermutationOperatorsCombinations(int *digitsArray, int arrayLength, int& outMatchingResults);
 };
