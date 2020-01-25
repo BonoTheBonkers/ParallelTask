@@ -15,7 +15,10 @@ void PermutationsFinder::DoJob(bool shouldPrintMatchingResults /* = false */)
 
 #pragma omp parallel
 	{
-		cout << "Thread number : " << omp_get_thread_num() << " is ready to work!\n";
+#pragma omp critical
+		{
+			cout << "Thread number : " << omp_get_thread_num() << " is ready to work!\n";
+		}
 	}
 	cout << endl << endl;
 
@@ -137,7 +140,10 @@ void PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n, in
 							++outMatchingResults;
 							if (shouldPrintMatchingResults)
 							{
-								cout << endl << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << " = 100" << endl;
+#pragma omp critical
+								{
+									cout << endl << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << " = 100" << endl;
+								}
 							}
 						}
 					}
@@ -151,7 +157,10 @@ void PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n, in
 							++outMatchingResults;
 							if (shouldPrintMatchingResults)
 							{
-								cout << endl << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << " = 100" << endl;
+#pragma omp critical
+								{
+									cout << endl << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << " = 100" << endl;
+								}
 							}
 						}
 					}
