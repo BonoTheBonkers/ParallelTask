@@ -18,7 +18,7 @@ public:
 	static void DoJob(bool shouldPrintMatchingResults = false);
 
 private:
-	static void FindMatchingDigitsAndOperatorsPermutations(int *digitsArray, int arrayLength, int& outMatchingResults);
-	static void CheckIthPermutation(int n, int i, int& outMatchingResults);
-	static void CheckPermutationOperatorsCombinations(int *digitsArray, int arrayLength, int& outMatchingResults);
+	static void FindMatchingDigitsAndOperatorsPermutations(int *digitsArray, int n, int& outMatchingResults, bool shouldPrintMatchingResults);
+	static void CheckIthPermutation(int n, int i, int& outMatchingResults, bool shouldPrintMatchingResults);
+	static void CheckPermutationOperatorsCombinations(int *digitsArray, int n, int& outMatchingResults, bool shouldPrintMatchingResults);
 };

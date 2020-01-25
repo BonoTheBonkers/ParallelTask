@@ -2,55 +2,69 @@
 #include "PermutationsFinder.h"
 #include <omp.h>
 #include <vector>
+#include <thread>
 
 using namespace std;
 
 void PermutationsFinder::DoJob(bool shouldPrintMatchingResults /* = false */)
 {
-	high_resolution_clock::time_point runStartTime = high_resolution_clock::now();
+	// sleep for 2 seconds
+	std::cout << "Job will start in 5 seconds" << "." << endl << endl;
+	using namespace std::this_thread;
+	sleep_until(system_clock::now() + seconds(2));
 
-	#pragma omp parallel
+#pragma omp parallel
 	{
 		cout << "Thread number : " << omp_get_thread_num() << " is ready to work!\n";
 	}
-	cout << "\n";
+	cout << endl << endl;
+
+	sleep_until(system_clock::now() + seconds(2));
+
+	high_resolution_clock::time_point runStartTime = high_resolution_clock::now();
 
 	int digits[] = { 0,1,2,3,4,5,6,7,8,9 };
 
 	int n = sizeof(digits) / sizeof(digits[0]);
 
 	int allMatchingResult = 0;
-	FindMatchingDigitsAndOperatorsPermutations(digits, n, allMatchingResult);
-	std::cout << "Matching results: " << allMatchingResult << ". \n";
+	FindMatchingDigitsAndOperatorsPermutations(digits, n, allMatchingResult, shouldPrintMatchingResults);
+	std::cout << endl << endl << "Matching results: " << allMatchingResult << endl << endl;
 
 	duration<double> runDuration = high_resolution_clock::now() - runStartTime;
-	std::cout << "Job duration: " << runDuration.count() << " seconds.";
+	std::cout << "Job duration: " << runDuration.count() << " seconds." << endl << endl;
+
+	std::cout << "Application will shutdown in 10 seconds" << "." << endl;
+	using namespace std::this_thread;
+	sleep_until(system_clock::now() + seconds(10));
 }
 
-void PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int *digitsArray, int arrayLength, int& outMatchingResults)
+void PermutationsFinder::FindMatchingDigitsAndOperatorsPermutations(int* digitsArray, int n, int& outMatchingResults, bool shouldPrintMatchingResults)
 {
 	int result = 0;
 
-	sort(digitsArray, digitsArray + arrayLength);
+	sort(digitsArray, digitsArray + n);
 
-	cout << "Possible permutations are:\n";
+	if (shouldPrintMatchingResults)
+	{
+		cout << "Possible permutations are:\n";
+	}
 
 	int PermuationsAmount = 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
 
-	cout << "PermuationsAmount: " << PermuationsAmount << "\n";
+	cout << endl << "PermuationsAmount: " << PermuationsAmount << endl;
 
-	int latestResult = 0;
 	#pragma omp parallel
 	#pragma omp for
 	for (int i = 0; i < PermuationsAmount; ++i)
 	{
-		CheckIthPermutation(10, i, outMatchingResults);
+		CheckIthPermutation(10, i, outMatchingResults, shouldPrintMatchingResults);
 	}
 }
 
 // Finding ith permutation function is based on this source: 
 // https://stackoverflow.com/questions/7918806/finding-n-th-permutation-without-computing-others
-void PermutationsFinder::CheckIthPermutation(int n, int i, int& outMatchingResults)
+void PermutationsFinder::CheckIthPermutation(int n, int i, int& outMatchingResults, bool shouldPrintMatchingResults)
 {
 	int j, k = 0;
 	int *fact = (int *)calloc(n, sizeof(int));
@@ -74,12 +88,11 @@ void PermutationsFinder::CheckIthPermutation(int n, int i, int& outMatchingResul
 	free(fact);
 	free(perm);
 
-	CheckPermutationOperatorsCombinations(perm, n, outMatchingResults);
+	CheckPermutationOperatorsCombinations(perm, n, outMatchingResults, shouldPrintMatchingResults);
 }
 
-void PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n, int& outMatchingResults)
+void PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n, int& outMatchingResults, bool shouldPrintMatchingResults)
 {
-	int result = 0;
 	for (int i = 1; i < n; ++i)
 	{
 		for (int j = 1; j < n; ++j)
@@ -122,7 +135,10 @@ void PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n, in
 						if ((currentNumber1 / currentNumber2 + currentNumber3) == 100.0f)
 						{
 							++outMatchingResults;
-							//cout << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << "\n";
+							if (shouldPrintMatchingResults)
+							{
+								cout << endl << currentNumber1 << " / " << currentNumber2 << " + " << currentNumber3 << " = 100" << endl;
+							}
 						}
 					}
 				}
@@ -133,7 +149,10 @@ void PermutationsFinder::CheckPermutationOperatorsCombinations(int *a, int n, in
 						if ((currentNumber1 + currentNumber2 / currentNumber3) == 100.0f)
 						{
 							++outMatchingResults;
-							//cout << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << "\n";
+							if (shouldPrintMatchingResults)
+							{
+								cout << endl << currentNumber1 << " + " << currentNumber2 << " / " << currentNumber3 << " = 100" << endl;
+							}
 						}
 					}
 				}
